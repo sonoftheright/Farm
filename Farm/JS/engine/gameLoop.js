@@ -5,7 +5,7 @@ var gameLoop = function(callback) {
 	entities.updateAllEntities();
 	// graphics.renderFrame();
 
-	if(graphics.getAnimationFrame() % 250 == 0 ){
+	if(graphics.getAnimationFrame() % 200 == 0 ){
 		console.log("Animation frame: " + graphics.getAnimationFrame() + "\n" +
 					"Loop frame: " + gameLoop.frame + "\n" +
 					"Render frame: " + renderLoop.frame);

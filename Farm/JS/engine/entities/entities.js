@@ -10,7 +10,7 @@ var entities = function(){
 					obj.x++;
 					obj.strafeCounter++;
 				}
-				else if(count > 300 && count < 400){
+				else if(count > 200 && count < 400){
 					obj.x--;
 				}
 				else if(count > 400){
