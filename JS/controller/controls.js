@@ -34,7 +34,8 @@ var controls = function() {
 	window.addEventListener('mouseup', function(event){ 
 		mouse.down = false;
 		inputQueue.push({event: 'mouseUp', data: controls.getKeyStates() });
-		console.log(inputQueue);});
+		// console.log(inputQueue);
+	});
 
 	window.addEventListener('mousewheel', function(event){/*handle mousewheel*/});
 
