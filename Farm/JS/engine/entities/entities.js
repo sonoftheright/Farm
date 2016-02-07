@@ -5,18 +5,18 @@ var entities = function(){
 	entityProperties = {
 		behaviors: {
 			strafe: function(obj){
-				var count = obj.strafeCounter;
-				if(count < 200){
-					obj.x++;
-					obj.strafeCounter++;
+				var count = obj.strafeCounter,
+					length = obj.strafeLength;
+				obj.strafeCounter++;
+				if(count < length){
+					obj.x += obj.stride();
 				}
-				else if(count > 200 && count < 400){
-					obj.x--;
+				else if(count > length && count < length * 2){
+					obj.x -= obj.stride();
 				}
-				else if(count > 400){
+				else if(count > length){
 					obj.strafeCounter = 0;
 				}
-				obj.strafeCounter++;
 			}
 		},
 		graphics: {}
@@ -49,8 +49,10 @@ var entities = function(){
 			type: "strafingSquare",
 			x: Math.random()*graphics.getCanvasWidth(),
 			y: Math.random()*graphics.getCanvasHeight(),
-			width: 4,
-			height: 4,
+			width: w,
+			height: h,
+			strafeLength: Math.random()*500,
+			stride: function(){return this.strafeLength / 300;},
 			render: function(ctx) {
 				ctx.drawImage(myCan, this.x, this.y);
 			},
@@ -90,8 +92,8 @@ var entities = function(){
 };
 
 function testAddSquare(){
-	for(var a = 0, b = 10000; a < b; a++){
-		var square = entities.newSquare(4, 4);
+	for(var a = 0, b = 3000; a < b; a++){
+		var square = entities.newSquare(10, 10);
 		entities.addEntityToUpdate(square);
 		graphics.addRenderObject(square);
 	}
