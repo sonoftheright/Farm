@@ -45,20 +45,21 @@ var entities = function(){
 		var myCan = graphics.getStaticCachedObject(
 			{type: 'strafingSquare', width: w, height: h}
 		);
-		return {
+		var obj = {
 			type: "strafingSquare",
 			x: Math.random()*graphics.getCanvasWidth(),
 			y: Math.random()*graphics.getCanvasHeight(),
 			width: w,
 			height: h,
 			strafeLength: Math.random()*500,
-			stride: function(){return this.strafeLength / 300;},
+			stride: function(){return obj.strafeLength / 300;},
 			render: function(ctx) {
-				ctx.drawImage(myCan, this.x, this.y);
+				ctx.drawImage(myCan, obj.x, obj.y);
 			},
 			strafeCounter: 5,
 			behaviors: [ entityProperties.behaviors.strafe ]
 		};
+		return obj;
 	},
 	circle = {};
 
