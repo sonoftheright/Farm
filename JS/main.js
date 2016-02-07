@@ -2,8 +2,8 @@
 
 var fMain = {
 	running: true,
-	gfps: 100,
-	rfps: 40,
+	gfps: 1000,
+	rfps: 35,
 	stop: function() { 
 		clearInterval(gL);
 		clearInterval(rL);
