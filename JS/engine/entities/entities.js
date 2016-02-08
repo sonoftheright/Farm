@@ -1,16 +1,18 @@
 /*entities.js*/
-
-var entities = function(){
-	var entitiesToUpdate = [],
+"use strict";
+const entities = function(){
+	const entitiesToUpdate = [],
 	entityProperties = {
 		behaviors: {
 			strafe: function(obj){
 				obj.strafeCounter++;
-				if(obj.strafeCounter < length){
-					obj.x += obj.stride();
+				obj.stride = obj.strafeLength / 300;
+				if(obj.strafeCounter < obj.strafeLength){
+					obj.x += obj.stride;
 				}
-				else if(obj.strafeCounter > obj.strafeLength && obj.strafeCounter < obj.strafeLength * 2){
-					obj.x -= obj.stride();
+				else if(obj.strafeCounter > obj.strafeLength && 
+						obj.strafeCounter < (obj.strafeLength * 2)){
+					obj.x -= obj.stride;
 				}
 				else if(obj.strafeCounter > obj.strafeLength){
 					obj.strafeCounter = 0;
@@ -39,22 +41,23 @@ var entities = function(){
 		};
 	},
 	strafingSquare = function(width, height) { 
-		var w = width, h = height;
-		var myCan = graphics.getStaticCachedObject(
-			{type: 'strafingSquare', width: w, height: h}
+		const myCan = graphics.getStaticCachedObject(
+			{type: 'strafingSquare', width: width, height: height}
 		);
-		var obj = {
+
+		const obj = {
+			canvas: myCan,
 			type: "strafingSquare",
 			x: Math.random()*graphics.getCanvasWidth(),
 			y: Math.random()*graphics.getCanvasHeight(),
-			width: w,
-			height: h,
-			strafeLength: Math.random()*500,
-			stride: function(){return obj.strafeLength / 300;},
-			render: function(ctx) {
-				ctx.drawImage(myCan, obj.x, obj.y);
+			width: width,
+			height: height,
+			strafeLength: (Math.random()*50) + 200,
+			stride: 0,
+			render: function() {
+				graphics.context.drawImage(obj.canvas, obj.x, obj.y);
 			},
-			strafeCounter: 5,
+			strafeCounter: 0,
 			behaviors: [ entityProperties.behaviors.strafe ]
 		};
 		return obj;
@@ -91,10 +94,12 @@ var entities = function(){
 };
 
 function testAddSquare(){
-	for(var a = 0, b = 3000; a < b; a++){
-		var square = entities.newSquare(10, 10);
+	var square = {};
+
+	for(var a = 0, b = 15000; a < b; a++){
+		square = entities.newSquare(10, 10);
 		entities.addEntityToUpdate(square);
-		graphics.addRenderObject(square);
+		graphics.addRenderObject(square, "objects");
 	}
 }
 
