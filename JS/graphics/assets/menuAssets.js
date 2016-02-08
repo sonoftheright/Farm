@@ -2,23 +2,28 @@
 
 var menuAssets = function() {
 	var button = function(xCoord, yCoord, width, height, text) {
-		var w = width,  h = height, t = text, 
+		var w = width,  h = height, x = xCoord, y = yCoord, t = text, 
+			size = 12,
 			bCan = graphics.getStaticCachedObject(
 				{type: "button", width: w, height: h}),
 			tCan = graphics.getStaticCachedObject(
-				{type: "text", text: t, size: 12});
+				{type: "text", text: t, size: size});
+		
+		//text position variables
+		var tL = graphics.getTextLength(text),
+			textX = (x + (w/2) - (tCan.width/2)),
+			textY = (y + (h/2) - (size/2));
+
 		var obj =  {
 			type: "button",
-			buttonCanvas: bCan, 
-			textCanvas: tCan,
-			x: xCoord, 
-			y: yCoord,
+			x: x, 
+			y: y,
 			width: w,
 			height: h,
 			text: t, 
 			render: function(ctx){
-				ctx.drawImage(button.buttonCanvas, button.x, button.y);
-				ctx.drawImage(button.textCanvas, button.x / 2, button.y / 2);
+				ctx.drawImage(bCan, obj.x, obj.y);
+				ctx.drawImage(tCan, textX, textY);
 			}
 		};
 		return obj;

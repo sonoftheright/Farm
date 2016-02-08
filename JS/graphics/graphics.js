@@ -22,14 +22,14 @@ var graphics = function() {
 			}
 
 			var can = document.createElement('canvas'),
-					ctx = can.getContext('2d');
+				ctx = can.getContext('2d');
+				ctx.beginPath();
 
 			if (object.type == "strafingSquare") {
 				
 				can.width = object.width + 1;
 				can.height = object.height + 1;
 
-				ctx.beginPath();
             	ctx.rect(0, 0, object.width, object.height);
             	ctx.stroke();
 
@@ -39,10 +39,12 @@ var graphics = function() {
 
 			}
 			else if (object.type == "button"){
-				can.width = object.width;
-				can.height = object.height;
-
-				ctx.beginPath();
+				can.width = object.width + 1;
+				can.height = object.height + 1;
+				console.log("Button width: " + object.width + "\n" + 
+							"Button height: " + object.height + "\n" + 
+							"Button x: " + object.x + "\n" +
+							"Button y: " + object.y + "\n");
 				ctx.rect(0, 0, object.width, object.height);
 				ctx.stroke();
 
@@ -55,13 +57,11 @@ var graphics = function() {
 					return graphics.graphicsCache["text" + object.text];
 				}
 
-				can.width = object.text.length;
+				can.width = ctx.measureText(object.text).width;
 				can.height = object.size;
-
-				ctx.beginPath();
-				ctx.font = object.size + "pt";
-				ctx.textAlign = "center";
-				ctx.strokeText(object.text, 0, 0);
+				ctx.textBaseline = "bottom";
+				ctx.font = object.size + "px";
+				ctx.strokeText(object.text, 0, object.size);
 
 				graphics.graphicsCache["text" + object.text] = can;
 				
@@ -139,13 +139,11 @@ var graphics = function() {
 		graphics.getRenderArray = function(){
 			return objectsToRender;
 		};
+
 		//calls the 'render' function on each object in render stack - unsustainable, as rendering should happen here and not in the object
 		graphics.render = function(objects){
 			for (var a = 0, b = objects.length; a < b; a++){
-				
-				if(objects[a].type == "square" || objects[a].type == "strafingSquare") {
-					objects[a].render(context);
-				}
+				objects[a].render(context);
 			}
 		};
 
@@ -161,8 +159,11 @@ var graphics = function() {
 	    	return {x: 0, y: 0};
 		};
 
-		graphics.getCanvasPosition = function() { return graphics.getObjectPosition(canvas); };
+		graphics.getTextLength = function(text) {
+			return context.measureText(text).width;
+		};
 
+		graphics.getCanvasPosition = function() { return graphics.getObjectPosition(canvas); };
 
 		graphics.getAnimationFrame = function() { return animationFrame; };
 		graphics.resetAnimationFrame = function() { animationFrame = 0; };

@@ -25,6 +25,7 @@ var controls = function() {
 		var pos = graphics.getCanvasPosition();
 		mouse.x = event.pageX - pos.x;
 		mouse.y = event.pageY - pos.y;
+		// console.log("X: " + mouse.x + " Y: " + mouse.y);
 	});
 	
 	window.addEventListener('mouseDown', function(event){ 

@@ -1,12 +1,16 @@
 /* menus - gui logic */
 
 var menu = function() {
-	var buttonHeight = 100,
-		buttonWidth = 40,
-		buttonSpacing = 20,
-		cushion = 20;
+	var buttonHeight = 20,
+		buttonWidth = 100,
+		buttonSpacing = 200,
+		cushion = 5;
 
-	var testButton = menuAssets.getNewButton(cushion, cushion, buttonHeight, buttonWidth, "Testing...");
+	var testButton = menuAssets.getNewButton(cushion, 
+											 cushion, 
+											 buttonWidth, 
+											 buttonHeight, 
+											 "Testing something pretty preposterously long");
 	graphics.addRenderObject(testButton);
 
 };
