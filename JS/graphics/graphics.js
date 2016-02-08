@@ -9,6 +9,7 @@ var graphics = function() {
 				scale: 1				//arbitrary?
 			},
 			objectsToRender = [],
+			menuObjectsToRender = [],
 			animationFrame = 0;
 		graphics.graphicsCache = {};
 
@@ -46,6 +47,8 @@ var graphics = function() {
 							"Button x: " + object.x + "\n" +
 							"Button y: " + object.y + "\n");
 				ctx.rect(0, 0, object.width, object.height);
+				ctx.fillStyle = "white";
+				ctx.fill();
 				ctx.stroke();
 
 				graphics.graphicsCache["button"] = can;
@@ -119,8 +122,9 @@ var graphics = function() {
 		};
 
 		//adds a draw function to the render stack to be run 
-		graphics.addRenderObject = function(obj) {
-			objectsToRender.push(obj);
+		graphics.addRenderObject = function(obj, array) {
+			if(array == "objects") {objectsToRender.push(obj);}
+			if(array == "menu") {menuObjectsToRender.push(obj);}
 		};
 
 		//clears render stack completely
@@ -171,6 +175,7 @@ var graphics = function() {
 		graphics.renderFrame = function(){
 			graphics.clearCanvas();
 			graphics.render(objectsToRender);
+			graphics.render(menuObjectsToRender);
 			window.requestAnimationFrame(function() { animationFrame++; });
 		};
 };

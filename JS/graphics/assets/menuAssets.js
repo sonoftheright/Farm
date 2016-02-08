@@ -24,13 +24,15 @@ var menuAssets = function() {
 			render: function(ctx){
 				ctx.drawImage(bCan, obj.x, obj.y);
 				ctx.drawImage(tCan, textX, textY);
-			}
+			},
+			action: function() { console.log("button pressed!");}
 		};
 		return obj;
 	};
 
 	menuAssets.getNewButton = function(x, y, w, h, t) {
 		return new button(x, y, w, h, t);
+
 	};
 };
 

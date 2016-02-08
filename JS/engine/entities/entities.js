@@ -97,9 +97,9 @@ function testAddSquare(){
 	for(var a = 0, b = 3000; a < b; a++){
 		var square = entities.newSquare(10, 10);
 		entities.addEntityToUpdate(square);
-		graphics.addRenderObject(square);
+		graphics.addRenderObject(square, "objects");
 	}
 }
 
 entities();
-//testAddSquare();
+testAddSquare();
