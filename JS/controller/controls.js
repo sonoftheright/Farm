@@ -22,9 +22,8 @@ var controls = function() {
 	/*Mouse*/
 
 	window.addEventListener('mousemove', function(event){
-		var pos = graphics.getCanvasPosition();
-		mouse.x = event.pageX - pos.x;
-		mouse.y = event.pageY - pos.y;
+		mouse.x = event.pageX - graphics.getCanvasPosition().x;
+		mouse.y = event.pageY - graphics.getCanvasPosition().y;
 	});
 	
 	window.addEventListener('mouseDown', function(event){ 
