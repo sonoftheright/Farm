@@ -45,6 +45,7 @@ var entities = function(){
 		var myCan = graphics.getStaticCachedObject(
 			{type: 'strafingSquare', width: w, height: h}
 		);
+
 		var obj = {
 			type: "strafingSquare",
 			x: Math.random()*graphics.getCanvasWidth(),
@@ -101,4 +102,4 @@ function testAddSquare(){
 }
 
 entities();
-testAddSquare();
+//testAddSquare();

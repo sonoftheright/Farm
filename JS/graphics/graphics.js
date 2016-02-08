@@ -16,27 +16,59 @@ var graphics = function() {
 
 		//cached images for greater performance awesomeness!
 		graphics.getStaticCachedObject = function (object) {
-			var name = object.type + object.width + object.height + '';
 
-			if(name in graphics.graphicsCache){ 
-				return graphics.graphicsCache[name];
+			if(object.type in graphics.graphicsCache){ 
+				return graphics.graphicsCache[object.type];
 			}
-			else {
 
-				var can = document.createElement('canvas'),
+			var can = document.createElement('canvas'),
 					ctx = can.getContext('2d');
-					can.width = object.width + 1;
-					can.height = object.height + 1;
+
+			if (object.type == "strafingSquare") {
+				
+				can.width = object.width + 1;
+				can.height = object.height + 1;
 
 				ctx.beginPath();
             	ctx.rect(0, 0, object.width, object.height);
             	ctx.stroke();
 
-				graphics.graphicsCache[name] = can;
+				graphics.graphicsCache["strafingSquare"] = can;
 
-				return graphics.graphicsCache[name];
+				return can;
 
 			}
+			else if (object.type == "button"){
+				can.width = object.width;
+				can.height = object.height;
+
+				ctx.beginPath();
+				ctx.rect(0, 0, object.width, object.height);
+				ctx.stroke();
+
+				graphics.graphicsCache["button"] = can;
+
+				return can;
+			}
+			else if (object.type == "text") {
+				if("text" + object.text in graphics.graphicsCache) {
+					return graphics.graphicsCache["text" + object.text];
+				}
+
+				can.width = object.text.length;
+				can.height = object.size;
+
+				ctx.beginPath();
+				ctx.font = object.size + "pt";
+				ctx.textAlign = "center";
+				ctx.strokeText(object.text, 0, 0);
+
+				graphics.graphicsCache["text" + object.text] = can;
+				
+				return can;
+			}
+
+			console.log("ERROR: Could not find cache OR could not create new cache! Unhandled type!");
 		};
 
 		window.addEventListener('resize', function (event){
@@ -88,9 +120,7 @@ var graphics = function() {
 
 		//adds a draw function to the render stack to be run 
 		graphics.addRenderObject = function(obj) {
-
 			objectsToRender.push(obj);
-
 		};
 
 		//clears render stack completely
@@ -99,13 +129,16 @@ var graphics = function() {
 		};
 
 		//removes specific render object
-		graphics.removeObjectToRender = function(id) {
+		graphics.removeRenderObject = function(id) {
 			for(var a = 0, b = objectsToRender.length; a < b; a++) {
 				if(objectsToRender[a].id == id){ objectsToRender.splice(a, 1); break; }
 			}
 			console.log('ERROR: Object could not be removed from render stack as it does not exist.');
 		};
 
+		graphics.getRenderArray = function(){
+			return objectsToRender;
+		};
 		//calls the 'render' function on each object in render stack - unsustainable, as rendering should happen here and not in the object
 		graphics.render = function(objects){
 			for (var a = 0, b = objects.length; a < b; a++){
