@@ -1,6 +1,6 @@
 /*gameLoop.js*/
 
-var gameLoop = function(callback) {
+var gameLoop = function() {
 
 	entities.updateAllEntities();
 	// graphics.renderFrame();
@@ -13,7 +13,7 @@ var gameLoop = function(callback) {
 	gameLoop.frame++;
 };
 
-var renderLoop = function(callback) {	
+var renderLoop = function() {	
 	graphics.renderFrame();
 	renderLoop.frame++;
 }
