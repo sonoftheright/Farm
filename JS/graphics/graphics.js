@@ -9,6 +9,7 @@ var graphics = function() {
 				scale: 1				//arbitrary?
 			},
 			objectsToRender = [],
+			menuObjectsToRender = [],
 			animationFrame = 0;
 		graphics.graphicsCache = {};
 
@@ -16,27 +17,61 @@ var graphics = function() {
 
 		//cached images for greater performance awesomeness!
 		graphics.getStaticCachedObject = function (object) {
-			var name = object.type + object.width + object.height + '';
 
-			if(name in graphics.graphicsCache){ 
-				return graphics.graphicsCache[name];
+			if(object.type in graphics.graphicsCache){ 
+				return graphics.graphicsCache[object.type];
 			}
-			else {
 
-				var can = document.createElement('canvas'),
-					ctx = can.getContext('2d');
-					can.width = object.width + 1;
-					can.height = object.height + 1;
-
+			var can = document.createElement('canvas'),
+				ctx = can.getContext('2d');
 				ctx.beginPath();
+
+			if (object.type == "strafingSquare") {
+				
+				can.width = object.width + 1;
+				can.height = object.height + 1;
+
             	ctx.rect(0, 0, object.width, object.height);
             	ctx.stroke();
 
-				graphics.graphicsCache[name] = can;
+				graphics.graphicsCache["strafingSquare"] = can;
 
-				return graphics.graphicsCache[name];
+				return can;
 
 			}
+			else if (object.type == "button"){
+				can.width = object.width + 1;
+				can.height = object.height + 1;
+				console.log("Button width: " + object.width + "\n" + 
+							"Button height: " + object.height + "\n" + 
+							"Button x: " + object.x + "\n" +
+							"Button y: " + object.y + "\n");
+				ctx.rect(0, 0, object.width, object.height);
+				ctx.fillStyle = "white";
+				ctx.fill();
+				ctx.stroke();
+
+				graphics.graphicsCache["button"] = can;
+
+				return can;
+			}
+			else if (object.type == "text") {
+				if("text" + object.text in graphics.graphicsCache) {
+					return graphics.graphicsCache["text" + object.text];
+				}
+
+				can.width = ctx.measureText(object.text).width;
+				can.height = object.size;
+				ctx.textBaseline = "bottom";
+				ctx.font = object.size + "px";
+				ctx.strokeText(object.text, 0, object.size);
+
+				graphics.graphicsCache["text" + object.text] = can;
+				
+				return can;
+			}
+
+			console.log("ERROR: Could not find cache OR could not create new cache! Unhandled type!");
 		};
 
 		window.addEventListener('resize', function (event){
@@ -87,10 +122,9 @@ var graphics = function() {
 		};
 
 		//adds a draw function to the render stack to be run 
-		graphics.addRenderObject = function(obj) {
-
-			objectsToRender.push(obj);
-
+		graphics.addRenderObject = function(obj, array) {
+			if(array == "objects") {objectsToRender.push(obj);}
+			if(array == "menu") {menuObjectsToRender.push(obj);}
 		};
 
 		//clears render stack completely
@@ -99,20 +133,21 @@ var graphics = function() {
 		};
 
 		//removes specific render object
-		graphics.removeObjectToRender = function(id) {
+		graphics.removeRenderObject = function(id) {
 			for(var a = 0, b = objectsToRender.length; a < b; a++) {
 				if(objectsToRender[a].id == id){ objectsToRender.splice(a, 1); break; }
 			}
 			console.log('ERROR: Object could not be removed from render stack as it does not exist.');
 		};
 
+		graphics.getRenderArray = function(){
+			return objectsToRender;
+		};
+
 		//calls the 'render' function on each object in render stack - unsustainable, as rendering should happen here and not in the object
 		graphics.render = function(objects){
 			for (var a = 0, b = objects.length; a < b; a++){
-				
-				if(objects[a].type == "square" || objects[a].type == "strafingSquare") {
-					objects[a].render(context);
-				}
+				objects[a].render(context);
 			}
 		};
 
@@ -128,8 +163,11 @@ var graphics = function() {
 	    	return {x: 0, y: 0};
 		};
 
-		graphics.getCanvasPosition = function() { return graphics.getObjectPosition(canvas); };
+		graphics.getTextLength = function(text) {
+			return context.measureText(text).width;
+		};
 
+		graphics.getCanvasPosition = function() { return graphics.getObjectPosition(canvas); };
 
 		graphics.getAnimationFrame = function() { return animationFrame; };
 		graphics.resetAnimationFrame = function() { animationFrame = 0; };
@@ -137,6 +175,7 @@ var graphics = function() {
 		graphics.renderFrame = function(){
 			graphics.clearCanvas();
 			graphics.render(objectsToRender);
+			graphics.render(menuObjectsToRender);
 			window.requestAnimationFrame(function() { animationFrame++; });
 		};
 };
