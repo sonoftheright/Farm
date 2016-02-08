@@ -1,7 +1,7 @@
 /* menus - gui logic */
-
-var menu = function() {
-	var buttonHeight = 20,
+"use strict";
+const menu = function() {
+	const buttonHeight = 20,
 		buttonWidth = 100,
 		buttonSpacing = 200,
 		cushion = 5,
@@ -12,7 +12,7 @@ var menu = function() {
 	};
 
 	menu.addTestButton = function() {
-		var testButton = menuAssets.getNewButton(cushion, 
+		const testButton = menuAssets.getNewButton(cushion, 
 											 cushion, 
 											 buttonWidth, 
 											 buttonHeight, 

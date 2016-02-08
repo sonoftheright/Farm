@@ -1,28 +1,32 @@
 /* graphics.js */
-
-var graphics = function() {
-		var canvas = document.getElementById('canvas');
-			canvas.offset = 0.95;
-		var context    = canvas.getContext('2d');
-		var camera = {
-				position: {x: 0, y: 0}, //top left corner, not center
-				scale: 1				//arbitrary?
-			},
-			objectsToRender = [],
-			menuObjectsToRender = [],
-			animationFrame = 0;
+"use strict";
+const graphics = function() {
+	const canvas = document.getElementById('canvas');
+		canvas.offset = 0.95;
+	const context    = canvas.getContext('2d');
+	const camera = {
+			position: {x: 0, y: 0}, //top left corner, not center
+			scale: 1				//arbitrary?
+		},
+		objectsToRender = [],
+		menuObjectsToRender = [];
+		graphics.animationFrame = 0;
 		graphics.graphicsCache = {};
+		graphics.context = context;
 
 		/* Local-Only Utilities */
 
 		//cached images for greater performance awesomeness!
 		graphics.getStaticCachedObject = function (object) {
-
+			if(object.type === "text" && (object.type + object.text) in graphics.graphicsCache){
+				return graphics.graphicsCache[object.type + object.text];
+				console.log("found my canvas!");
+			}
 			if(object.type in graphics.graphicsCache){ 
 				return graphics.graphicsCache[object.type];
 			}
 
-			var can = document.createElement('canvas'),
+			const can = document.createElement('canvas'),
 				ctx = can.getContext('2d');
 				ctx.beginPath();
 
@@ -45,31 +49,6 @@ var graphics = function() {
 				return can;
 
 			}
-			else if (object.type == "button"){
-
-				can.width = object.width + 1;
-				can.height = object.height + 1;
-
-				can.width = object.width + 2;
-				can.height = object.height + 2;
-
-				console.log("Button width: " + object.width + "\n" + 
-							"Button height: " + object.height + "\n" + 
-							"Button x: " + object.x + "\n" +
-							"Button y: " + object.y + "\n");
-
-				ctx.rect(0, 0, object.width, object.height);
-
-				ctx.rect(1, 1, object.width, object.height);
-
-				ctx.fillStyle = "white";
-				ctx.fill();
-				ctx.stroke();
-
-				graphics.graphicsCache["button"] = can;
-
-				return can;
-			}
 			else if (object.type == "text") {
 				if("text" + object.text in graphics.graphicsCache) {
 					return graphics.graphicsCache["text" + object.text];
@@ -91,6 +70,32 @@ var graphics = function() {
 				
 				return can;
 			}
+			else if (object.type == "button"){
+
+				can.width = object.width + 1;
+				can.height = object.height + 1;
+
+				can.width = object.width + 2;
+				can.height = object.height + 2;
+
+				// console.log("Button width: " + object.width + "\n" + 
+				// 			"Button height: " + object.height + "\n" + 
+				// 			"Button x: " + object.x + "\n" +
+				// 			"Button y: " + object.y + "\n");
+
+				ctx.rect(0, 0, object.width, object.height);
+
+				ctx.rect(1, 1, object.width, object.height);
+
+				ctx.fillStyle = "white";
+				ctx.fill();
+				ctx.stroke();
+
+				graphics.graphicsCache["button"] = can;
+
+				return can;
+			}
+			
 
 			console.log("ERROR: Could not find cache OR could not create new cache! Unhandled type!");
 		};
@@ -162,7 +167,7 @@ var graphics = function() {
 		};
 
 		graphics.getRenderArray = function(){
-			return objectsToRender;
+			return {"objects": objectsToRender, "menu": menuObjectsToRender};
 		};
 
 		//calls the 'render' function on each object in render stack - unsustainable, as rendering should happen here and not in the object
@@ -190,14 +195,15 @@ var graphics = function() {
 
 		graphics.getCanvasPosition = function() { return graphics.getObjectPosition(canvas); };
 
-		graphics.getAnimationFrame = function() { return animationFrame; };
-		graphics.resetAnimationFrame = function() { animationFrame = 0; };
+		graphics.getAnimationFrame = function() { return graphics.animationFrame; };
+		graphics.resetAnimationFrame = function() { graphics.animationFrame = 0; };
+		graphics.incrementAnimationFrame = function() { graphics.animationFrame++; };
 
 		graphics.renderFrame = function(){
 			graphics.clearCanvas();
 			graphics.render(objectsToRender);
 			graphics.render(menuObjectsToRender);
-			window.requestAnimationFrame(function() { animationFrame++; });
+			window.requestAnimationFrame(graphics.incrementAnimationFrame, canvas);
 		};
 };
 

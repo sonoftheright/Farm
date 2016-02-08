@@ -1,9 +1,9 @@
 /*farmMain.js - constants and runtime variables*/
-
-var fMain = {
+"use strict";
+const fMain = {
 	running: true,
-	gfps: 60,
-	rfps: 60,
+	gfps: 40,
+	rfps: 40,
 	stop: function() { 
 		clearInterval(gL);
 		clearInterval(rL);
