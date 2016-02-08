@@ -28,10 +28,10 @@ var graphics = function() {
 
 			if (object.type == "strafingSquare") {
 				
-				can.width = object.width + 1;
-				can.height = object.height + 1;
+				can.width = object.width + 2;
+				can.height = object.height + 2;
 
-            	ctx.rect(0, 0, object.width, object.height);
+            	ctx.rect(1, 1, object.width, object.height);
             	ctx.stroke();
 
 				graphics.graphicsCache["strafingSquare"] = can;
@@ -40,13 +40,13 @@ var graphics = function() {
 
 			}
 			else if (object.type == "button"){
-				can.width = object.width + 1;
-				can.height = object.height + 1;
+				can.width = object.width + 2;
+				can.height = object.height + 2;
 				console.log("Button width: " + object.width + "\n" + 
 							"Button height: " + object.height + "\n" + 
 							"Button x: " + object.x + "\n" +
 							"Button y: " + object.y + "\n");
-				ctx.rect(0, 0, object.width, object.height);
+				ctx.rect(1, 1, object.width, object.height);
 				ctx.fillStyle = "white";
 				ctx.fill();
 				ctx.stroke();
@@ -60,11 +60,11 @@ var graphics = function() {
 					return graphics.graphicsCache["text" + object.text];
 				}
 
-				can.width = ctx.measureText(object.text).width;
-				can.height = object.size;
+				can.width = ctx.measureText(object.text).width + 2; 
+				can.height = object.size + 2;
 				ctx.textBaseline = "bottom";
 				ctx.font = object.size + "px";
-				ctx.strokeText(object.text, 0, object.size);
+				ctx.strokeText(object.text, 0, object.size + 1);
 
 				graphics.graphicsCache["text" + object.text] = can;
 				

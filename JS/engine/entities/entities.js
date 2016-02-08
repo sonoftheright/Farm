@@ -5,16 +5,14 @@ var entities = function(){
 	entityProperties = {
 		behaviors: {
 			strafe: function(obj){
-				var count = obj.strafeCounter,
-					length = obj.strafeLength;
 				obj.strafeCounter++;
-				if(count < length){
+				if(obj.strafeCounter < length){
 					obj.x += obj.stride();
 				}
-				else if(count > length && count < length * 2){
+				else if(obj.strafeCounter > obj.strafeLength && obj.strafeCounter < obj.strafeLength * 2){
 					obj.x -= obj.stride();
 				}
-				else if(count > length){
+				else if(obj.strafeCounter > obj.strafeLength){
 					obj.strafeCounter = 0;
 				}
 			}
