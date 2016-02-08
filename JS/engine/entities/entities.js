@@ -6,11 +6,11 @@ var entities = function(){
 		behaviors: {
 			strafe: function(obj){
 				obj.strafeCounter++;
-				if(obj.strafeCounter < length){
-					obj.x += obj.stride();
+				if(obj.strafeCounter < obj.strafeLength){
+					obj.x += obj.strafeLength;
 				}
-				else if(obj.strafeCounter > obj.strafeLength && obj.strafeCounter < obj.strafeLength * 2){
-					obj.x -= obj.stride();
+				else if(obj.strafeCounter > obj.strafeLength && obj.strafeCounter < (obj.strafeLength * 2)){
+					obj.x -= obj.strafeLength;
 				}
 				else if(obj.strafeCounter > obj.strafeLength){
 					obj.strafeCounter = 0;
@@ -51,7 +51,7 @@ var entities = function(){
 			width: w,
 			height: h,
 			strafeLength: Math.random()*500,
-			stride: function(){return obj.strafeLength / 300;},
+			stride: function(){ return obj.strafeLength / 300;},
 			render: function(ctx) {
 				ctx.drawImage(myCan, obj.x, obj.y);
 			},
